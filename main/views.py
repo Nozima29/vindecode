@@ -1,27 +1,23 @@
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import *
+from rest_framework.views import APIView
+from .serializers import VINDataSerializer
+from .models import VINData
 import requests
 
 
-@api_view(['GET'])
-def view_vins(request):
-    if request.method == 'GET':
-        vin_data = VINData.objects.all()
-        serializer = VINSerializer(vin_data)
-        return Response(serializer.data)
-    return Response()
+class CreateVin(APIView):
+    """
+    APIView for getting the decoded data for Vehicle ID 
+    EndPoint receives the VIN -> decodes -> stores on DB
+    """
 
-
-@api_view(['GET'])
-def get_vin(request, vin=None):
-    if request.method == 'GET':
+    def get(self, request, vin=None):
+        vin_data = VINDataSerializer(VINData.objects.all(), many=True)
         url = 'https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVINValuesBatch/'
         res = requests.post(url, data={'format': 'json', 'data': vin})
 
         if res.status_code == 200:
             json_data = res.json()['Results'][0]
-
             make = json_data['Make']
             doors = json_data['Doors']
             model = json_data['Model']
@@ -40,8 +36,7 @@ def get_vin(request, vin=None):
                     state=state,
                     doors=doors
                 )
-            vin_data = VINSerializer(vincode=vin)
+                #vin = VINData.objects.get(vincode=vin)
+            #vin_data = VINSerializer(vin)
 
         return Response(vin_data.data)
-
-    return Response()

@@ -4,7 +4,7 @@ from .models import *
 
 
 class VINDataAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['id', 'vincode', 'model', 'year', 'make']
 
 
 admin.site.register(VINData, VINDataAdmin)
