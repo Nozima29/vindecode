@@ -1,7 +1,7 @@
 # vindecode
 VIN (Vehicle Identification Number) decoding api service
 
-The main progect app - main
+The main project app - main
 
 To run the project locally:
 *   create virtual environment (<i>python -m venv env</i>) for python version > 3.8 
