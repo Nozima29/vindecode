@@ -2,6 +2,7 @@
 /__pycache__/*
 __pycache__/*
 */__pycache__
+main/migrations/__pycache__/*
 .env
 */migrations/*
 
